@@ -29,7 +29,7 @@ export class ProfileController {
     }
 
     @Put('update/:id')
-    async updateProfile(@Param('id') idBody: IdProfileTDO, @Body() dataBodyProfile:ProfileTDO):Promise<Profile>{
+    async updateProfile(@Param('id') idBody: number, @Body() dataBodyProfile:ProfileTDO):Promise<Profile>{
         return await this.service.updateProfile(idBody, dataBodyProfile);
     }
 }
