@@ -2,8 +2,7 @@ import { Body, Controller,Delete,Get, Param, Post, Put, Patch } from '@nestjs/co
 import { ProfileService } from './profile.service';
 import { ProfileTDO } from './dto/ProfileDTO';
 import { Profile } from './entity/profile';
-import { DeleteResult, UpdateResult } from 'typeorm';
-import { IdProfileTDO } from './dto/IdProfileTDO';
+import { DeleteResult } from 'typeorm';
 
 @Controller('profile')
 export class ProfileController {
