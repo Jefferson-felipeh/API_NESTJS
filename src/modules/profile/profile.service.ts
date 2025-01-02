@@ -17,25 +17,16 @@ export class ProfileService implements ProfileModels<any>{
     ){}
 
     //Cada método que for criado, irá receber uma promise que será do tipo profile, que é a entidade do módulo_
-    getAll = async ():Promise<Profile[]> => {
-        return await this.profileRepository.find();
-    }
+    getAll = async ():Promise<Profile[]> => await this.profileRepository.find();
 
-    getOne = async (id:any) => {
-        return await this.profileRepository.findOne(id);
-    }
+    getOne = async (id:any) => await this.profileRepository.findOne(id);
 
     create = async (bodyProfile: Partial<Profile>):Promise<Profile> => {
         const data = await this.profileRepository.create(bodyProfile);//Criando o banco de dados através da entidade;
         return this.profileRepository.save(data);//salvando as informações no banco de dados;
     }
 
-    removeProfile = async (id: IdProfileTDO):Promise<DeleteResult> =>{
-       return await this.profileRepository.delete(id);
-    }
+    removeProfile = async (id: IdProfileTDO):Promise<DeleteResult> => await this.profileRepository.delete(id);
 
-    updateProfile = async (id: IdProfileTDO, dataUpdateProfile:ProfileTDO): Promise<any> => {
-        return await this.profileRepository.update(id , dataUpdateProfile);
-
-    }
+    updateProfile = async (id: IdProfileTDO, dataUpdateProfile:ProfileTDO):Promise<any> => await this.profileRepository.update(id , dataUpdateProfile);
 }
