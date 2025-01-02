@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Profile } from './entity/profile';
+import { ProfileModels } from 'src/models/profileModel';
+import { IdProfileTDO } from './dto/IdProfileTDO';
+import { ProfileTDO } from './dto/ProfileDTO';
 
 @Injectable()
-export class ProfileService {
+export class ProfileService implements ProfileModels<any>{
     constructor(
         //Estou injetando a entidade desse módulo para ser utilizada como tipagem das propriedades e métodos;
         //Observe que com o typeorm, importei a classe Repository, e estou injetando na classe atraves do constructor;
@@ -14,12 +17,25 @@ export class ProfileService {
     ){}
 
     //Cada método que for criado, irá receber uma promise que será do tipo profile, que é a entidade do módulo_
-    getAll = async ()=> {
+    getAll = async ():Promise<Profile[]> => {
         return await this.profileRepository.find();
+    }
+
+    getOne = async (id:any) => {
+        return await this.profileRepository.findOne(id);
     }
 
     create = async (bodyProfile: Partial<Profile>):Promise<Profile> => {
         const data = await this.profileRepository.create(bodyProfile);//Criando o banco de dados através da entidade;
         return this.profileRepository.save(data);//salvando as informações no banco de dados;
+    }
+
+    removeProfile = async (id: IdProfileTDO):Promise<DeleteResult> =>{
+       return await this.profileRepository.delete(id);
+    }
+
+    updateProfile = async (id: IdProfileTDO, dataUpdateProfile:ProfileTDO): Promise<any> => {
+        return await this.profileRepository.update(id , dataUpdateProfile);
+
     }
 }
