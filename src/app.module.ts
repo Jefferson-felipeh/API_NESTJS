@@ -9,6 +9,7 @@ import { Profile } from './modules/profile/entity/profile';
 @Module({
   imports: [
     ProfileModule,//Importabdo o módulo do profile;
+    
     ConfigModule.forRoot(), // Carrega variáveis do arquivo .env
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

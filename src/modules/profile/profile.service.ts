@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { Profile } from './entity/profile';
@@ -30,15 +30,39 @@ export class ProfileService implements ProfileModels<any>{
 
     updateProfile = async (id: number, dataUpdateProfile:ProfileTDO):Promise<any> => {
         try{
+            //Fazendo excessoes no nestjs usando propriedades nativas com essa funcionalidade_
             if(!id){
-                throw new NotFoundException(`dados com o id ${id} não encontrado!`);
+                console.log('Id não existe!');
+
+                //1º Forma: Usando o NotFoundException(message)_
+                throw new NotFoundException(`Dados com o id ${id} não encontrado!`);//Esse NotFoundException é uma propriedade importada do nest para mensagens de erro;
+
+            }
+            if(!id){
+                //2º Forma:
+                throw new HttpException('Id não encontrado',404);//Eu consigo usar a propriedade importada nativamente do nest e exibir a mensagem, adicionando o status;
+                //OU
+                //throw new HttpException('',HttpStatus.NOT_FOUND);//Passando o status de forma nativa
             }
 
             return await this.profileRepository.update(id, dataUpdateProfile);
-            
+
         }catch(error){
             console.log(error)
         }
+    }
+
+    async getAllProfiles(profilesQuery:ProfileTDO):Promise<Profile[]>{
+
+        return (await this.profileRepository.find()).filter((t) => {
+            let verify = false;
+
+            if(profilesQuery.name !== undefined && t.name.toLocaleLowerCase().includes(profilesQuery.name.toLowerCase())) verify = true;
+
+            if(profilesQuery.email !== undefined && t.email.toLocaleLowerCase().includes(profilesQuery.email.toLowerCase()) ) verify = true;
+
+            return verify;
+        });
     }
 }
 
@@ -68,4 +92,8 @@ EX:
             console.log(error)
         }
     }
+*/
+
+/*
+Lembrando que os métodos do service devem seguir a mesma estrutura que os métodos abstratos da camada de abstração, principalmente os seus argumentos;
 */
