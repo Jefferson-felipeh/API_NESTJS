@@ -52,6 +52,7 @@ export class ProfileService implements ProfileModels<any>{
         }
     }
 
+    //Esse método tem a funcionalidade de obter os dados do endpoint, mas precisamente no query do endpoint,e filtrar os dados de acordo com os valores_
     async getAllProfiles(profilesQuery:ProfileTDO):Promise<Profile[]>{
 
         return (await this.profileRepository.find()).filter((t) => {
